@@ -1,2 +1,20 @@
-# python-gui-development-2026
-A professional collection of modern Python GUI applications including ATM System, Number Guessing Game, Todo Planner and other desktop projects developed during internship practice.
+
+---
+
+## Master Repository README Update
+
+Main repository README:
+
+```md
+## 🏦 Projects Included
+
+### 1. TechFact Bank ATM System v1.0
+Professional ATM GUI Application
+
+### 2. Smart Number Guessing Game
+Modern Python GUI Game
+
+### 3. Smart Todo Planner
+Daily Productivity Planner
+
+More projects will be added during internship journey.
