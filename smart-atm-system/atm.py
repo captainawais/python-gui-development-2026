@@ -1,305 +1,91 @@
 import tkinter as tk
-from tkinter import messagebox, simpledialog
-import json
-import os
+from tkinter import messagebox
 
-# ==========================
-# DATA FILES
-# ==========================
+from components.login import LoginScreen
+from components.dashboard import Dashboard
 
-USER_FILE = "data/users.json"
-HISTORY_FILE = "data/history.json"
+from utils.database import load_users
 
-# ==========================
-# LOAD USER DATA
-# ==========================
+users_data = load_users()
+current_user = None
 
-with open(USER_FILE, "r") as file:
-    user = json.load(file)
+# Global attempts counter
+attempts_left = 3
 
-# ==========================
-# SAVE FUNCTIONS
-# ==========================
 
-def save_user():
-    with open(USER_FILE, "w") as file:
-        json.dump(user, file, indent=4)
+def login_handler(
+    pin,
+    attempts,
+    login_frame
+):
+    global current_user
+    global attempts_left
 
-def add_history(text):
-    try:
-        with open(HISTORY_FILE, "r") as file:
-            history = json.load(file)
-    except:
-        history = []
+    # Check PIN
+    for user in users_data["users"]:
 
-    history.append(text)
+        if user["pin"] == pin:
 
-    with open(HISTORY_FILE, "w") as file:
-        json.dump(history, file, indent=4)
+            current_user = user
 
-# ==========================
-# LOGIN FUNCTION
-# ==========================
+            messagebox.showinfo(
+                "Login Success",
+                f"Welcome {user['name']}"
+            )
 
-def login():
-    entered_pin = pin_entry.get()
+            login_frame.destroy()
 
-    if entered_pin == user["pin"]:
-        login_frame.pack_forget()
-        dashboard_frame.pack(expand=True)
-        update_balance()
-
-    else:
-        messagebox.showerror(
-            "Access Denied",
-            "Incorrect ATM PIN!"
-        )
-
-# ==========================
-# BALANCE UPDATE
-# ==========================
-
-def update_balance():
-    balance_label.config(
-        text=f"PKR {user['balance']}"
-    )
-
-# ==========================
-# DEPOSIT
-# ==========================
-
-def deposit():
-
-    amount = simpledialog.askinteger(
-        "Deposit",
-        "Enter amount:"
-    )
-
-    if amount and amount > 0:
-
-        user["balance"] += amount
-
-        save_user()
-
-        add_history(
-            f"Deposit: +PKR {amount}"
-        )
-
-        update_balance()
-
-        messagebox.showinfo(
-            "Success",
-            f"PKR {amount} deposited."
-        )
-
-# ==========================
-# WITHDRAW
-# ==========================
-
-def withdraw():
-
-    amount = simpledialog.askinteger(
-        "Withdraw",
-        "Enter amount:"
-    )
-
-    if amount and amount > 0:
-
-        if amount > user["balance"]:
-
-            messagebox.showerror(
-                "Error",
-                "Insufficient Balance!"
+            Dashboard(
+                window,
+                current_user,
+                users_data
             )
 
             return
 
-        user["balance"] -= amount
+    # Wrong PIN
+    attempts_left -= 1
 
-        save_user()
+    if attempts_left > 0:
 
-        add_history(
-            f"Withdraw: -PKR {amount}"
+        messagebox.showerror(
+            "Invalid PIN",
+            f"Wrong PIN!\nAttempts Left: {attempts_left}"
         )
 
-        update_balance()
+    else:
 
-        messagebox.showinfo(
-            "Success",
-            f"PKR {amount} withdrawn."
+        messagebox.showerror(
+            "ATM Locked",
+            "Too many failed attempts.\nATM is now locked."
         )
 
-# ==========================
-# HISTORY
-# ==========================
+        window.destroy()
 
-def show_history():
-
-    try:
-        with open(HISTORY_FILE, "r") as file:
-            history = json.load(file)
-
-    except:
-        history = []
-
-    history_text = "\n".join(history)
-
-    if not history_text:
-        history_text = "No transactions yet."
-
-    messagebox.showinfo(
-        "Transaction History",
-        history_text
-    )
-
-# ==========================
-# WINDOW
-# ==========================
 
 window = tk.Tk()
 
-window.title("TechFact Bank ATM")
-window.geometry("600x650")
+window.title("TechFact Bank ATM v2.0")
+
+window.geometry("800x600")
+
 window.configure(bg="#001f3f")
-window.resizable(False, False)
 
-# ==========================
-# TITLE
-# ==========================
-
-title = tk.Label(
+LoginScreen(
     window,
-    text="🏦 TechFact Bank",
-    bg="#001f3f",
-    fg="white",
-    font=("Segoe UI", 24, "bold")
+    login_handler
 )
-
-title.pack(pady=20)
-
-# ==========================
-# LOGIN FRAME
-# ==========================
-
-login_frame = tk.Frame(
-    window,
-    bg="white",
-    padx=30,
-    pady=30
-)
-
-login_frame.pack(pady=60)
-
-tk.Label(
-    login_frame,
-    text="ATM Login",
-    bg="white",
-    font=("Segoe UI", 18, "bold")
-).pack(pady=10)
-
-pin_entry = tk.Entry(
-    login_frame,
-    show="*",
-    font=("Segoe UI", 16),
-    justify="center"
-)
-
-pin_entry.pack(pady=15)
-
-tk.Button(
-    login_frame,
-    text="Login",
-    command=login,
-    bg="#0074D9",
-    fg="white",
-    width=15,
-    height=2,
-    font=("Segoe UI", 12, "bold"),
-    border=0
-).pack()
-
-# ==========================
-# DASHBOARD
-# ==========================
-
-dashboard_frame = tk.Frame(
-    window,
-    bg="white",
-    padx=30,
-    pady=30
-)
-
-balance_title = tk.Label(
-    dashboard_frame,
-    text="Current Balance",
-    bg="white",
-    font=("Segoe UI", 16)
-)
-
-balance_title.pack()
-
-balance_label = tk.Label(
-    dashboard_frame,
-    text="PKR 0",
-    bg="white",
-    fg="green",
-    font=("Segoe UI", 24, "bold")
-)
-
-balance_label.pack(pady=10)
-
-tk.Button(
-    dashboard_frame,
-    text="💰 Deposit",
-    command=deposit,
-    width=20,
-    bg="#2ECC40",
-    fg="white",
-    font=("Segoe UI", 12, "bold")
-).pack(pady=8)
-
-tk.Button(
-    dashboard_frame,
-    text="💸 Withdraw",
-    command=withdraw,
-    width=20,
-    bg="#FF4136",
-    fg="white",
-    font=("Segoe UI", 12, "bold")
-).pack(pady=8)
-
-tk.Button(
-    dashboard_frame,
-    text="📜 History",
-    command=show_history,
-    width=20,
-    bg="#0074D9",
-    fg="white",
-    font=("Segoe UI", 12, "bold")
-).pack(pady=8)
-
-tk.Button(
-    dashboard_frame,
-    text="❌ Exit",
-    command=window.destroy,
-    width=20,
-    bg="black",
-    fg="white",
-    font=("Segoe UI", 12, "bold")
-).pack(pady=8)
-
-# ==========================
-# FOOTER
-# ==========================
 
 footer = tk.Label(
     window,
     text="Powered by TechFactOfficial • Developed by EngrAwais",
     bg="#001f3f",
-    fg="white",
-    font=("Segoe UI", 10)
+    fg="white"
 )
 
-footer.pack(side="bottom", pady=10)
+footer.pack(
+    side="bottom",
+    pady=10
+)
 
 window.mainloop()

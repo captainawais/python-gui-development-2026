@@ -1,4 +1,16 @@
 {
-    "pin": "1234",
-    "balance": 10500
+    "users": [
+        {
+            "name": "Awais",
+            "account": "TFB1001",
+            "pin": "1234",
+            "balance": 4000
+        },
+        {
+            "name": "Ali",
+            "account": "TFB1002",
+            "pin": "5678",
+            "balance": 13000
+        }
+    ]
 }
