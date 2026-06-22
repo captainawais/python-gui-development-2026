@@ -1,41 +1,91 @@
 import json
 
 USER_FILE = "data/users.json"
-HISTORY_FILE = "data/history.json"
 
+
+# ==========================
+# LOAD USERS
+# ==========================
 
 def load_users():
 
-    with open(USER_FILE, "r") as file:
-        return json.load(file)
-
-
-def save_users(data):
-
-    with open(USER_FILE, "w") as file:
-        json.dump(data, file, indent=4)
-
-
-def load_history():
-
     try:
-        with open(HISTORY_FILE, "r") as file:
+
+        with open(
+            USER_FILE,
+            "r"
+        ) as file:
+
             return json.load(file)
 
     except:
-        return []
+
+        return {
+            "users": []
+        }
 
 
-def save_history(history):
+# ==========================
+# SAVE USERS
+# ==========================
 
-    with open(HISTORY_FILE, "w") as file:
-        json.dump(history, file, indent=4)
+def save_users(data):
+
+    with open(
+        USER_FILE,
+        "w"
+    ) as file:
+
+        json.dump(
+            data,
+            file,
+            indent=4
+        )
 
 
-def add_history(text):
+# ==========================
+# ADD HISTORY
+# ==========================
 
-    history = load_history()
+def add_history(
+    user,
+    text
+):
 
-    history.append(text)
+    if "history" not in user:
 
-    save_history(history)
+        user["history"] = []
+
+    user["history"].append(
+        text
+    )
+
+
+# ==========================
+# GET HISTORY
+# ==========================
+
+def get_history(user):
+
+    return user.get(
+        "history",
+        []
+    )
+
+
+# ==========================
+# LAST TRANSACTION
+# ==========================
+
+def get_last_transaction(user):
+
+    history = user.get(
+        "history",
+        []
+    )
+
+    if history:
+
+        return history[-1]
+
+    return "No Transaction"

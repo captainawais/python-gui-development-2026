@@ -2,7 +2,7 @@ from tkinter import messagebox
 
 from utils.database import get_history
 
-def show_history(user):
+def mini_statement(user):
 
 
     history = get_history(user)
@@ -10,16 +10,18 @@ def show_history(user):
     if not history:
 
         messagebox.showinfo(
-            "Transaction History",
+            "Mini Statement",
             "No Transactions Found"
         )
 
         return
 
-    history_text = "\n".join(history)
+    recent = history[-5:]
+
+    statement = "\n".join(recent)
 
     messagebox.showinfo(
-        "Transaction History",
-        history_text
+        "Mini Statement",
+        f"Last {len(recent)} Transactions\n\n{statement}"
     )
 

@@ -1,16 +1,175 @@
 {
     "users": [
         {
-            "name": "Awais",
+            "name": "Awais Farooq",
             "account": "TFB1001",
-            "pin": "1234",
-            "balance": 4000
+            "pin": "4321",
+            "balance": 89500,
+            "history": [
+                "Deposit +PKR 10000",
+                "Withdraw -PKR 7000",
+                "Received +PKR 50000 From TFB1003",
+                "Transfer -PKR 6000 To TFB1002",
+                "Fast Cash -PKR 500",
+                "Fast Cash -PKR 500",
+                "Fast Cash -PKR 5000",
+                "Fast Cash -PKR 2000",
+                "Fast Cash -PKR 10000",
+                "Fast Cash -PKR 500",
+                "Withdraw -PKR 1000",
+                "Deposit +PKR 5000",
+                "Security: ATM PIN Changed",
+                "Received +PKR 50000 From TFB1020"
+            ]
         },
         {
-            "name": "Ali",
+            "name": "Ali Khan",
             "account": "TFB1002",
-            "pin": "5678",
-            "balance": 13000
+            "pin": "1234",
+            "balance": 500,
+            "history": [
+                "Security: ATM PIN Changed",
+                "Deposit +PKR 80000",
+                "Withdraw -PKR 8000",
+                "Transfer -PKR 50000 To TFB1003",
+                "Received +PKR 6000 From TFB1001",
+                "Transfer -PKR 40000 To TFB1020",
+                "Fast Cash -PKR 500"
+            ]
+        },
+        {
+            "name": "Ahmed Raza",
+            "account": "TFB1003",
+            "pin": "1111",
+            "balance": 10000,
+            "history": [
+                "Received +PKR 50000 From TFB1002",
+                "Transfer -PKR 50000 To TFB1001",
+                "Withdraw -PKR 5000"
+            ]
+        },
+        {
+            "name": "Usman Tariq",
+            "account": "TFB1004",
+            "pin": "2222",
+            "balance": 22000,
+            "history": []
+        },
+        {
+            "name": "Bilal Ahmed",
+            "account": "TFB1005",
+            "pin": "3333",
+            "balance": 9000,
+            "history": []
+        },
+        {
+            "name": "Hassan Ali",
+            "account": "TFB1006",
+            "pin": "4444",
+            "balance": 18000,
+            "history": []
+        },
+        {
+            "name": "Hamza Malik",
+            "account": "TFB1007",
+            "pin": "5555",
+            "balance": 12000,
+            "history": []
+        },
+        {
+            "name": "Zain Shah",
+            "account": "TFB1008",
+            "pin": "6666",
+            "balance": 30000,
+            "history": []
+        },
+        {
+            "name": "Saad Akram",
+            "account": "TFB1009",
+            "pin": "7777",
+            "balance": 14500,
+            "history": []
+        },
+        {
+            "name": "Umar Farooq",
+            "account": "TFB1010",
+            "pin": "8888",
+            "balance": 25000,
+            "history": []
+        },
+        {
+            "name": "Talha Javed",
+            "account": "TFB1011",
+            "pin": "9999",
+            "balance": 17000,
+            "history": []
+        },
+        {
+            "name": "Adeel Hussain",
+            "account": "TFB1012",
+            "pin": "1010",
+            "balance": 35000,
+            "history": []
+        },
+        {
+            "name": "Muneeb Khan",
+            "account": "TFB1013",
+            "pin": "1212",
+            "balance": 21000,
+            "history": []
+        },
+        {
+            "name": "Shahzaib Ali",
+            "account": "TFB1014",
+            "pin": "1313",
+            "balance": 27000,
+            "history": []
+        },
+        {
+            "name": "Rizwan Ahmed",
+            "account": "TFB1015",
+            "pin": "1414",
+            "balance": 19000,
+            "history": []
+        },
+        {
+            "name": "Saqib Raza",
+            "account": "TFB1016",
+            "pin": "1515",
+            "balance": 42000,
+            "history": []
+        },
+        {
+            "name": "Faizan Malik",
+            "account": "TFB1017",
+            "pin": "1616",
+            "balance": 11000,
+            "history": []
+        },
+        {
+            "name": "Noman Khan",
+            "account": "TFB1018",
+            "pin": "1717",
+            "balance": 50000,
+            "history": []
+        },
+        {
+            "name": "Asad Mehmood",
+            "account": "TFB1019",
+            "pin": "1818",
+            "balance": 8000,
+            "history": []
+        },
+        {
+            "name": "Farhan Ali",
+            "account": "TFB1020",
+            "pin": "1234",
+            "balance": 6000,
+            "history": [
+                "Received +PKR 40000 From TFB1002",
+                "Security: ATM PIN Changed",
+                "Transfer -PKR 50000 To TFB1001"
+            ]
         }
     ]
 }

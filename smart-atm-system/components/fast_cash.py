@@ -1,4 +1,3 @@
-from tkinter import simpledialog
 from tkinter import messagebox
 
 from utils.database import (
@@ -10,35 +9,17 @@ from components import sounds
 from components.loading import LoadingScreen
 
 
-def withdraw_money(
+# ==========================
+# FAST CASH
+# ==========================
+
+def fast_cash(
     root,
     user,
     users_data,
-    update_balance
+    update_balance,
+    amount
 ):
-
-    # ==========================
-    # ASK AMOUNT
-    # ==========================
-
-    amount = simpledialog.askinteger(
-        "Withdraw Money",
-        "Enter Withdrawal Amount"
-    )
-
-    if amount is None:
-        return
-
-    if amount <= 0:
-
-        sounds.error()
-
-        messagebox.showerror(
-            "Invalid Amount",
-            "Please enter a valid amount."
-        )
-
-        return
 
     # ==========================
     # BALANCE CHECK
@@ -50,33 +31,37 @@ def withdraw_money(
 
         messagebox.showerror(
             "Insufficient Balance",
-            "Not enough balance available."
+            f"You do not have PKR {amount:,} available."
         )
 
         return
 
     # ==========================
-    # PROCESSING SCREEN
+    # PROCESSING SOUND
     # ==========================
 
     sounds.loading()
 
+    # ==========================
+    # LOADING SCREEN
+    # ==========================
+
     loading = LoadingScreen(
         root,
-        "Dispensing Cash..."
+        f"Dispensing PKR {amount:,}..."
     )
 
     # ==========================
-    # COMPLETE WITHDRAWAL
+    # COMPLETE WITHDRAW
     # ==========================
 
-    def finish_withdraw():
+    def finish_fast_cash():
 
         user["balance"] -= amount
 
         add_history(
             user,
-            f"Withdraw -PKR {amount}"
+            f"Fast Cash -PKR {amount}"
         )
 
         save_users(
@@ -88,11 +73,12 @@ def withdraw_money(
         loading.close()
 
         sounds.stop_sound()
+
         sounds.success()
 
         messagebox.showinfo(
-            "Withdrawal Successful",
-            f"Please collect your cash.\n\nPKR {amount:,} withdrawn successfully."
+            "Cash Dispensed",
+            f"Please collect your cash.\n\nPKR {amount:,}"
         )
 
     # ==========================
@@ -101,5 +87,5 @@ def withdraw_money(
 
     root.after(
         2500,
-        finish_withdraw
+        finish_fast_cash
     )

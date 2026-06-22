@@ -1,65 +1,163 @@
-from tkinter import simpledialog, messagebox
-from utils.database import save_users, add_history
+from tkinter import simpledialog
+from tkinter import messagebox
+
+from utils.database import (
+    save_users,
+    add_history
+)
+
 from components import sounds
+from components.loading import LoadingScreen
 
 
-def transfer_money(user, users_data, update_balance):
+def transfer_money(
+    root,
+    user,
+    users_data,
+    update_balance
+):
+
+    # ==========================
+    # ACCOUNT NUMBER
+    # ==========================
 
     account = simpledialog.askstring(
-        "Transfer",
-        "Enter Account Number"
+        "Transfer Money",
+        "Enter Receiver Account Number"
     )
 
     if not account:
         return
 
+    # ==========================
+    # AMOUNT
+    # ==========================
+
     amount = simpledialog.askinteger(
-        "Transfer",
-        "Enter Amount"
+        "Transfer Money",
+        "Enter Transfer Amount"
     )
 
-    if not amount:
+    if amount is None:
         return
+
+    if amount <= 0:
+
+        sounds.error()
+
+        messagebox.showerror(
+            "Invalid Amount",
+            "Please enter a valid amount."
+        )
+
+        return
+
+    # ==========================
+    # SELF TRANSFER BLOCK
+    # ==========================
+
+    if account == user["account"]:
+
+        sounds.error()
+
+        messagebox.showerror(
+            "Transfer Error",
+            "You cannot transfer money to your own account."
+        )
+
+        return
+
+    # ==========================
+    # BALANCE CHECK
+    # ==========================
 
     if amount > user["balance"]:
 
         sounds.error()
 
         messagebox.showerror(
-            "Error",
-            "Insufficient Balance"
+            "Insufficient Balance",
+            "Not enough balance available."
         )
 
         return
+
+    # ==========================
+    # FIND RECEIVER
+    # ==========================
+
+    receiver = None
 
     for target_user in users_data["users"]:
 
         if target_user["account"] == account:
 
-            user["balance"] -= amount
+            receiver = target_user
+            break
 
-            target_user["balance"] += amount
+    if receiver is None:
 
-            save_users(users_data)
+        sounds.error()
 
-            add_history(
-                f"{user['name']} Transfer PKR {amount} to {account}"
-            )
+        messagebox.showerror(
+            "Account Not Found",
+            "Receiver account does not exist."
+        )
 
-            sounds.transfer()
+        return
 
-            update_balance()
+    # ==========================
+    # PROCESSING
+    # ==========================
 
-            messagebox.showinfo(
-                "Success",
-                f"Transferred PKR {amount}"
-            )
+    sounds.loading()
 
-            return
+    loading = LoadingScreen(
+        root,
+        "Transferring Funds..."
+    )
 
-    sounds.error()
+    # ==========================
+    # COMPLETE TRANSFER
+    # ==========================
 
-    messagebox.showerror(
-        "Error",
-        "Account Not Found"
+    def finish_transfer():
+
+        user["balance"] -= amount
+
+        receiver["balance"] += amount
+
+        # Sender History
+
+        add_history(
+            user,
+            f"Transfer -PKR {amount} To {receiver['account']}"
+        )
+
+        # Receiver History
+
+        add_history(
+            receiver,
+            f"Received +PKR {amount} From {user['account']}"
+        )
+
+        save_users(
+            users_data
+        )
+
+        loading.close()
+
+        update_balance()
+
+        sounds.stop_sound()
+        sounds.success()
+
+        messagebox.showinfo(
+            "Transfer Successful",
+            f"PKR {amount:,} transferred successfully.\n\nReceiver: {receiver['name']}"
+        )
+
+    root.after(
+        2500,
+        finish_transfer
     )
