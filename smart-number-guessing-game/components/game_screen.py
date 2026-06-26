@@ -5,6 +5,8 @@
 import tkinter as tk
 import random
 from tkinter import messagebox
+from utils.game_stats import GameStats
+from utils.xp_system import XPSystem
 from components.sounds import (
     play_click,
     play_win,
@@ -34,6 +36,12 @@ class GameScreen:
         self.root = root
 
         self.difficulty = difficulty
+        
+        # Game Managers
+
+        self.stats = GameStats()
+
+        self.xp = XPSystem()
 
         # Main Frame
 
@@ -67,7 +75,10 @@ class GameScreen:
     # ==========================
 
     def initialize_game(self):
-
+       
+        self.stats.update_games_played()
+        
+    
         self.secret_number = 0
 
         self.max_attempts = 0
@@ -111,9 +122,6 @@ class GameScreen:
 
         self.attempts_left = self.max_attempts
 
-       # print(
-       #   self.secret_number
-       # )
 
 
     # ==========================
@@ -246,7 +254,7 @@ class GameScreen:
         # =========================
         
     def check_guess(self):
-            play_click()
+            
             # Empty Input
 
             if not self.guess_entry.get().strip():
@@ -289,6 +297,9 @@ class GameScreen:
 
             self.update_attempts()
 
+            
+            play_click()
+            
             # Correct Guess
 
             if guess == self.secret_number:
@@ -296,18 +307,19 @@ class GameScreen:
                 self.correct_guess()
 
                 return
-
-            # Check if guess is out of range
             
-            if guess != self.secret_number:
 
-                self.show_hint(
-                    guess
-                )
+            # Smart Hint
+
+            self.show_hint(
+                guess
+            )
+
 
             # Score
 
             self.update_score()
+
 
             # Game Over
 
@@ -315,14 +327,16 @@ class GameScreen:
 
                 self.game_over()
 
+
             # Clear Entry
 
             self.guess_entry.delete(
                 0,
                 tk.END
-            ) 
-            
+            )
+
             self.guess_entry.focus_set()
+
 
     # ==========================
     # SMART HINT SYSTEM
@@ -358,11 +372,11 @@ class GameScreen:
 
         if guess < self.secret_number:
 
-            direction = "Higher ⬆"
+            direction = "Try Higher ⬆"
 
         else:
 
-            direction = "Lower ⬇"
+            direction = "Try Lower ⬇"
 
         # Very Close
 
@@ -407,10 +421,24 @@ class GameScreen:
 
     def correct_guess(self):
         play_win()
-        # Close Game Screen
+
+        self.stats.update_games_won()
+
+        self.stats.update_high_score(
+            self.difficulty,
+            self.score
+        )
+
+        self.stats.update_win_streak()
+
+        self.xp.add_xp(20)
+
+        if self.score == 100:
+
+            self.xp.add_xp(50)
 
         self.frame.destroy()
-
+            
         # Open Result Screen
 
         from components.result_screen import ResultScreen
@@ -461,6 +489,11 @@ class GameScreen:
         # Close Current Screen
 
         self.frame.destroy()
+        self.stats.update_games_lost()
+        self.stats.reset_win_streak()
+        self.xp.add_xp(
+            5
+        )
 
         # Open Result Screen
 

@@ -18,7 +18,7 @@ window.title(
 )
 
 window.geometry(
-    "900x800"
+    "1000x1800"
 )
 
 window.configure(

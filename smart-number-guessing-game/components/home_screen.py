@@ -4,9 +4,10 @@
 
 import tkinter as tk
 from tkinter import messagebox
-
+from utils.game_stats import GameStats
 from components.game_screen import GameScreen
-
+from utils.xp_system import XPSystem
+from components.statistics_panel import StatisticsPanel 
 
 # ==========================
 # HOME SCREEN CLASS
@@ -21,7 +22,9 @@ class HomeScreen:
     def __init__(self, root):
 
         self.root = root
-
+        self.difficulty = tk.StringVar()
+        self.stats = GameStats()
+        self.xp = XPSystem()
         # Main Frame
 
         self.frame = tk.Frame(
@@ -45,6 +48,21 @@ class HomeScreen:
         self.create_difficulty()
 
         self.create_start_button()
+        StatisticsPanel(
+         self.frame
+            )
+        tk.Button(
+            self.frame,
+            text="📊 Statistics",
+            command=self.open_statistics,
+            bg="#2563eb",
+            fg="white",
+            font=("Segoe UI", 11, "bold"),
+            width=20,
+            height=2,
+            border=0
+        ).pack(pady=15)
+
 
     # ==========================
     # TITLE SECTION
@@ -71,6 +89,42 @@ class HomeScreen:
         ).pack(
             pady=(0, 40)
         )
+        
+        tk.Label(
+            self.frame,
+            text=f"🔥 Current Streak : {self.stats.get_current_streak()}",
+            bg="#0f172a",
+            fg="#22c55e",
+            font=("Segoe UI", 11, "bold")
+        ).pack()
+
+        tk.Label(
+            self.frame,
+            text=f"👑 Best Streak : {self.stats.get_best_streak()}",
+            bg="#0f172a",
+            fg="#facc15",
+            font=("Segoe UI", 11, "bold")
+        ).pack(pady=(5,20))
+
+        tk.Label(
+            self.frame,
+            text=f"⭐ Level : {self.xp.get_level()}",
+            bg="#0f172a",
+            fg="#38bdf8",
+            font=("Segoe UI",11,"bold")
+        ).pack()
+
+        tk.Label(
+            self.frame,
+            text=f"💎 XP : {self.xp.get_xp()}",
+            bg="#0f172a",
+            fg="#22c55e",
+            font=("Segoe UI",11,"bold")
+        ).pack(
+            pady=(5,20)
+        )
+
+
 
     # ==========================
     # DIFFICULTY SECTION
@@ -185,3 +239,9 @@ class HomeScreen:
             self.root,
             self.difficulty.get()
         )
+        
+    def open_statistics(self):
+
+        from components.statistics_panel import StatisticsPanel
+
+        StatisticsPanel(self.root)   
