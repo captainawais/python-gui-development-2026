@@ -36,7 +36,7 @@ class HomeScreen:
 
         # Selected Difficulty
 
-        self.difficulty = tk.StringVar()
+        self.difficulty = tk.StringVar(value="easy")
 
         # Build UI
 
@@ -64,12 +64,12 @@ class HomeScreen:
 
         tk.Label(
             self.frame,
-            text="Version 1.0",
+            text="Version 1.2",
             bg="#0f172a",
-            fg="cyan",
-            font=("Segoe UI", 14)
+            fg="#38bdf8",
+            font=("Segoe UI", 13, "bold")
         ).pack(
-            pady=(0, 30)
+            pady=(0, 40)
         )
 
     # ==========================
@@ -88,9 +88,14 @@ class HomeScreen:
             pady=(20, 10)
         )
 
-        difficulty_frame = tk.Frame(
+        difficulty_frame = tk.LabelFrame(
             self.frame,
-            bg="#0f172a"
+            text=" Difficulty ",
+            bg="#0f172a",
+            fg="white",
+            padx=20,
+            pady=15,
+            font=("Segoe UI", 11, "bold")
         )
 
         difficulty_frame.pack()

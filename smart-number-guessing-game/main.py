@@ -14,7 +14,7 @@ from components.home_screen import HomeScreen
 window = tk.Tk()
 
 window.title(
-    "Smart Number Guessing Game v1.1"
+    "Smart Number Guessing Game v1.2"
 )
 
 window.geometry(

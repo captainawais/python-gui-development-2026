@@ -5,6 +5,14 @@
 import tkinter as tk
 import random
 from tkinter import messagebox
+from components.sounds import (
+    play_click,
+    play_win,
+    play_lose,
+    play_near,
+    play_far,
+    play_error
+)
 
 
 # ==========================
@@ -103,9 +111,9 @@ class GameScreen:
 
         self.attempts_left = self.max_attempts
 
-        print(
-            self.secret_number
-        )
+       # print(
+       #   self.secret_number
+       # )
 
 
     # ==========================
@@ -116,12 +124,22 @@ class GameScreen:
 
         tk.Label(
             self.frame,
+            text="🎯 Guess The Number",
+            bg="#0f172a",
+            fg="white",
+            font=("Segoe UI", 24, "bold")
+        ).pack(
+            pady=(30,10)
+        )
+
+        tk.Label(
+            self.frame,
             text=f"Difficulty : {self.difficulty.title()}",
             bg="#0f172a",
             fg="#facc15",
-            font=("Segoe UI", 11, "bold")
+            font=("Segoe UI", 12, "bold")
         ).pack(
-            pady=(0, 20)
+            pady=(0, 30)
         )
 
     # ==========================
@@ -148,6 +166,8 @@ class GameScreen:
         self.guess_entry.pack(
             pady=10
         )
+        self.guess_entry.focus_set()
+        
         self.guess_entry.bind(
             "<Return>",
             lambda event: self.check_guess()
@@ -226,7 +246,7 @@ class GameScreen:
         # =========================
         
     def check_guess(self):
-
+            play_click()
             # Empty Input
 
             if not self.guess_entry.get().strip():
@@ -247,13 +267,21 @@ class GameScreen:
                 )
 
             except:
-
+                play_error()
                 messagebox.showerror(
                     "Invalid Input",
-                    "Only Numbers Are Allowed."
+                    "Please enter numbers only."
                 )
 
+                self.guess_entry.delete(
+                    0,
+                    tk.END
+                )
+
+                self.guess_entry.focus_set()
+
                 return
+
 
             # Attempts
 
@@ -269,17 +297,13 @@ class GameScreen:
 
                 return
 
-            # Too High
+            # Check if guess is out of range
+            
+            if guess != self.secret_number:
 
-            if guess > self.secret_number:
-
-                self.show_too_high()
-
-            # Too Low
-
-            else:
-
-                self.show_too_low()
+                self.show_hint(
+                    guess
+                )
 
             # Score
 
@@ -296,45 +320,93 @@ class GameScreen:
             self.guess_entry.delete(
                 0,
                 tk.END
+            ) 
+            
+            self.guess_entry.focus_set()
+
+    # ==========================
+    # SMART HINT SYSTEM
+    # ==========================
+
+    def show_hint(self, guess):
+
+        difference = abs(
+            guess - self.secret_number
+        )
+
+        # Difficulty Wise Range
+
+        if self.difficulty == "easy":
+
+            very_close = 2
+            close = 5
+            medium = 10
+
+        elif self.difficulty == "medium":
+
+            very_close = 5
+            close = 10
+            medium = 20
+
+        else:
+
+            very_close = 10
+            close = 20
+            medium = 40
+
+        # Decide Direction
+
+        if guess < self.secret_number:
+
+            direction = "Higher ⬆"
+
+        else:
+
+            direction = "Lower ⬇"
+
+        # Very Close
+
+        if difference <= very_close:
+            play_near()
+            self.hint_label.config(
+                text=f"🔥 Very Close! Go {direction}",
+                fg="#22c55e"
             )
 
+        # Close
 
-    # ==========================
-    # TOO HIGH
-    # ==========================
+        elif difference <= close:
+            play_near()
+            self.hint_label.config(
+                text=f"😊 Close! Go {direction}",
+                fg="#38bdf8"
+            )
 
-    def show_too_high(self):
+        # Medium
 
-        self.hint_label.config(
-            text="📈 Too High! Try A Smaller Number.",
-            fg="orange"
-        )
+        elif difference <= medium:
+            play_near()
+            self.hint_label.config(
+                text=f"🙂 Getting Closer! Go {direction}",
+                fg="#facc15"
+            )
 
+        # Far
 
-    # ==========================
-    # TOO LOW
-    # ==========================
-
-    def show_too_low(self):
-
-        self.hint_label.config(
-            text="📉 Too Low! Try A Bigger Number.",
-            fg="cyan"
-        )
-
-
+        else:
+            play_far()
+            self.hint_label.config(
+                text=f"😅 Too Far! Go {direction}",
+                fg="#f97316"
+            )
+            
+        
     # ==========================
     # CORRECT GUESS
     # ==========================
 
     def correct_guess(self):
-
-        messagebox.showinfo(
-            "Congratulations 🎉",
-            f"You Guessed The Correct Number!\n\n"
-            f"Your Score : {self.score}"
-        )
-
+        play_win()
         # Close Game Screen
 
         self.frame.destroy()
@@ -348,8 +420,9 @@ class GameScreen:
             True,
             self.score,
             self.secret_number
-        )
+        )     
         
+    
     # ==========================
     # UPDATE SCORE
     # ==========================
@@ -358,13 +431,10 @@ class GameScreen:
 
         # Reduce Score
 
-        self.score -= 10
-
-        # Minimum Score
-
-        if self.score < 0:
-
-            self.score = 0
+        self.score = max(
+            0,
+            self.score - 10
+        )
 
         # Update Label
 
@@ -387,7 +457,7 @@ class GameScreen:
     # ==========================
 
     def game_over(self):
-
+        play_lose()
         # Close Current Screen
 
         self.frame.destroy()
