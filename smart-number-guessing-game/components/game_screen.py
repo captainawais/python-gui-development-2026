@@ -7,6 +7,7 @@ import random
 from tkinter import messagebox
 from utils.game_stats import GameStats
 from utils.xp_system import XPSystem
+from components.timer import GameTimer
 from components.sounds import (
     play_click,
     play_win,
@@ -60,6 +61,12 @@ class GameScreen:
         self.initialize_game()
 
         self.create_header()
+        
+        self.timer = GameTimer(
+            self.frame
+        )
+
+        self.timer.start()
 
         self.create_guess_input()
 
@@ -75,8 +82,6 @@ class GameScreen:
     # ==========================
 
     def initialize_game(self):
-       
-        self.stats.update_games_played()
         
     
         self.secret_number = 0
@@ -327,15 +332,7 @@ class GameScreen:
 
                 self.game_over()
 
-
-            # Clear Entry
-
-            self.guess_entry.delete(
-                0,
-                tk.END
-            )
-
-            self.guess_entry.focus_set()
+            return
 
 
     # ==========================
@@ -418,11 +415,41 @@ class GameScreen:
     # ==========================
     # CORRECT GUESS
     # ==========================
-
+    
+    
     def correct_guess(self):
+
+        # ==========================
+        # SAVE GAME STATS
+        # ==========================
+        
+                # Stop Timer
+
+        self.timer.stop()
+
+        # Play Win Sound
+
         play_win()
 
+        # Total Guesses
+
+        guesses = self.max_attempts - self.attempts_left
+
+        # ==========================
+        # UPDATE GAME STATS
+        # ==========================
+
+        self.stats.update_games_played()
+
         self.stats.update_games_won()
+
+        self.stats.update_total_score(
+            self.score
+        )
+
+        self.stats.update_total_guesses(
+            guesses
+        )
 
         self.stats.update_high_score(
             self.difficulty,
@@ -430,26 +457,78 @@ class GameScreen:
         )
 
         self.stats.update_win_streak()
+        
+        # ==========================
+        # ADD XP
+        # ==========================
 
-        self.xp.add_xp(20)
+        self.xp.add_xp(
+            self.score
+        )
 
-        if self.score == 100:
 
-            self.xp.add_xp(50)
+        # ==========================
+        # CHECK ACHIEVEMENTS
+        # ==========================
+
+        from utils.achievement_manager import AchievementManager
+
+        achievement = AchievementManager()
+
+        unlocked = achievement.check(
+
+            score=self.score,
+
+            attempts=guesses,
+
+            difficulty=self.difficulty,
+
+            seconds=self.timer.get_time()
+
+        )
+
+
+        # ==========================
+        # SHOW ACHIEVEMENT POPUPS
+        # ==========================
+
+        from components.achievement_popup import AchievementPopup
+
+        for item in unlocked:
+
+            AchievementPopup(
+                self.root,
+                item
+            )
+
+        # ==========================
+        # CLOSE GAME SCREEN
+        # ==========================
 
         self.frame.destroy()
-            
-        # Open Result Screen
+    
+
+        # ==========================
+        # OPEN RESULT SCREEN
+        # ==========================
 
         from components.result_screen import ResultScreen
 
         ResultScreen(
+
             self.root,
+
             True,
+
             self.score,
-            self.secret_number
-        )     
-        
+
+            self.secret_number,
+
+            self.timer.get_time(),
+            self.difficulty
+
+        )  
+            
     
     # ==========================
     # UPDATE SCORE
@@ -503,5 +582,7 @@ class GameScreen:
             self.root,
             False,
             self.score,
-            self.secret_number
+            self.secret_number,
+            self.timer.get_time(),
+            self.difficulty
         )

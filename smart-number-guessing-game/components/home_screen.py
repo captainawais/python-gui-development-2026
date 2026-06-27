@@ -8,6 +8,8 @@ from utils.game_stats import GameStats
 from components.game_screen import GameScreen
 from utils.xp_system import XPSystem
 from components.statistics_panel import StatisticsPanel 
+from components.footer import Footer
+
 
 # ==========================
 # HOME SCREEN CLASS
@@ -22,7 +24,6 @@ class HomeScreen:
     def __init__(self, root):
 
         self.root = root
-        self.difficulty = tk.StringVar()
         self.stats = GameStats()
         self.xp = XPSystem()
         # Main Frame
@@ -48,9 +49,7 @@ class HomeScreen:
         self.create_difficulty()
 
         self.create_start_button()
-        StatisticsPanel(
-         self.frame
-            )
+        
         tk.Button(
             self.frame,
             text="📊 Statistics",
@@ -63,7 +62,15 @@ class HomeScreen:
             border=0
         ).pack(pady=15)
 
+        Footer(self.frame)
 
+        self.frame.bind(
+            "<Return>",
+            lambda event: self.start_game()
+        )
+        
+        self.frame.focus_set()
+        
     # ==========================
     # TITLE SECTION
     # ==========================
@@ -82,7 +89,7 @@ class HomeScreen:
 
         tk.Label(
             self.frame,
-            text="Version 1.2",
+            text="Version 2.0",
             bg="#0f172a",
             fg="#38bdf8",
             font=("Segoe UI", 13, "bold")
@@ -219,6 +226,8 @@ class HomeScreen:
     # ==========================
 
     def start_game(self):
+        
+        self.root.unbind("<Return>")
 
         if not self.difficulty.get():
 
@@ -242,6 +251,6 @@ class HomeScreen:
         
     def open_statistics(self):
 
-        from components.statistics_panel import StatisticsPanel
-
         StatisticsPanel(self.root)   
+        
+        

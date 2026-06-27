@@ -14,11 +14,11 @@ from components.home_screen import HomeScreen
 window = tk.Tk()
 
 window.title(
-    "Smart Number Guessing Game v1.2"
+    "Smart Number Guessing Game v2.0"
 )
 
 window.geometry(
-    "1000x1800"
+    "1000x800"
 )
 
 window.configure(
@@ -30,36 +30,20 @@ window.resizable(
     False
 )
 
+# Escape Key Exit
 
-# ==========================
-# START HOME SCREEN
-# ==========================
-
-HomeScreen(
-    window
-)
-
-
-# ==========================
-# FOOTER
-# ==========================
-
-footer = tk.Label(
-    window,
-    text="Powered by Tech Fact Official & Developed by Engr Awais Farooq",
-    bg="#0f172a",
-    fg="white",
-    font=("Segoe UI", 10)
-)
-
-footer.pack(
-    side="bottom",
-    pady=10
+window.bind(
+    "<Escape>",
+    lambda event: window.destroy()
 )
 
 
 # ==========================
 # START APPLICATION
 # ==========================
+
+HomeScreen(
+    window
+)
 
 window.mainloop()
