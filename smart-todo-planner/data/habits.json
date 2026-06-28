@@ -1,0 +1,124 @@
+{
+    "habits": [
+        {
+            "name": "\ud83c\udf05 Wake Up",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\udcaa Workout",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83e\uddd8 Meditation",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\udcc5 Planning",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\udcbb Coding",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\udcda Reading",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\udca7 Drink Water",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83e\udd57 Healthy Food",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\udeb6 Walking",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "\ud83d\ude34 Sleep Early",
+            "days": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ]
+}
