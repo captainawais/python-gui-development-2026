@@ -5,56 +5,58 @@
 import json
 import os
 
+# ==========================
+# STORAGE CLASS
+# ==========================
 
-# ==========================
-# STORAGE
-# ==========================
 
 class Storage:
 
     FILE = "data/habits.json"
 
-    @classmethod
-    def load(cls):
+    # ==========================
+    # LOAD DATA
+    # ==========================
 
-        if not os.path.exists(cls.FILE):
+    @staticmethod
+    def load():
+
+        if not os.path.exists(Storage.FILE):
 
             return {
-                "habits":[]
+                "habits": [],
+                "current_streak": 0,
+                "best_streak": 0,
+                "last_completed_date": "",
             }
 
-        with open(
-
-            cls.FILE,
-
-            "r",
-
-            encoding="utf-8"
-
-        ) as file:
+        with open(Storage.FILE, "r", encoding="utf-8") as file:
 
             return json.load(file)
 
+    # ==========================
+    # SAVE DATA
+    # ==========================
 
-    @classmethod
-    def save(cls,data):
+    @staticmethod
+    def save(data):
 
-        with open(
+        with open(Storage.FILE, "w", encoding="utf-8") as file:
 
-            cls.FILE,
+            json.dump(data, file, indent=4, ensure_ascii=False)
 
-            "w",
+    # ==========================
+    # RESET DATA
+    # ==========================
 
-            encoding="utf-8"
+    @staticmethod
+    def reset():
 
-        ) as file:
-
-            json.dump(
-
-                data,
-
-                file,
-
-                indent=4
-
-            )
+        Storage.save(
+            {
+                "habits": [],
+                "current_streak": 0,
+                "best_streak": 0,
+                "last_completed_date": "",
+            }
+        )

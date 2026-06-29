@@ -3,6 +3,7 @@
 # ==========================
 
 import tkinter as tk
+
 from utils.storage import Storage
 
 # ==========================
@@ -12,15 +13,19 @@ from utils.storage import Storage
 
 class HabitTable:
 
+    # ==========================
+    # INIT
+    # ==========================
+
     def __init__(self, parent):
 
         self.parent = parent
 
+        self.data = Storage.load()
+
         self.check_vars = []
 
-        # Load Saved Data
-
-        self.data = Storage.load()
+        self.percent_labels = []
 
         self.habits = [
             "🌅 Wake Up",
@@ -35,123 +40,166 @@ class HabitTable:
             "😴 Sleep Early",
         ]
 
-        card = tk.Frame(parent, bg="white", bd=1, relief="solid")
+        # ==========================
+        # MAIN CARD
+        # ==========================
 
-        card.pack(padx=40, pady=30, fill="x")
+        self.card = tk.Frame(parent, bg="white", bd=1, relief="solid")
+
+        self.card.pack(fill="x", padx=30, pady=25)
+
+        # ==========================
+        # TITLE
+        # ==========================
 
         tk.Label(
-            card,
+            self.card,
             text="My Habits",
             bg="white",
             fg="#111827",
-            font=("Segoe UI", 18, "bold"),
-        ).pack(anchor="w", padx=20, pady=(20, 10))
+            font=("Segoe UI", 20, "bold"),
+        ).pack(anchor="w", padx=20, pady=(20, 15))
 
         # ==========================
-        # HEADER
+        # TABLE FRAME
         # ==========================
 
-        header = tk.Frame(card, bg="white")
+        self.table = tk.Frame(self.card, bg="white")
 
-        header.pack(fill="x", padx=20, pady=(0, 10))
+        self.table.pack(fill="x", padx=20, pady=(0, 15))
+
+        self.create_header()
+
+        self.create_rows()
+
+        self.create_save_button()
+
+        self.load_data()
+
+    # ==========================
+    # TABLE HEADER
+    # ==========================
+
+    def create_header(self):
 
         tk.Label(
-            header,
+            self.table,
             text="Habit",
             bg="white",
-            width=20,
+            fg="#111827",
+            width=22,
             anchor="w",
             font=("Segoe UI", 10, "bold"),
-        ).grid(row=0, column=0, sticky="w")
+        ).grid(row=0, column=0, padx=5, pady=8, sticky="w")
 
         for day in range(1, 8):
 
             tk.Label(
-                header,
+                self.table,
                 text=str(day),
                 bg="white",
-                fg="#64748b",
+                fg="#64748B",
                 width=3,
                 font=("Segoe UI", 9, "bold"),
-            ).grid(row=0, column=day)
+            ).grid(row=0, column=day, padx=2)
 
         tk.Label(
-            header,
+            self.table,
             text="%",
             bg="white",
-            fg="#2563eb",
+            fg="#2563EB",
             width=5,
             font=("Segoe UI", 10, "bold"),
         ).grid(row=0, column=8, padx=10)
 
-        # ==========================
-        # HABITS
-        # ==========================
+    # ==========================
+    # HABIT ROWS
+    # ==========================
 
-        for habit in self.habits:
+    def create_rows(self):
 
-            row = tk.Frame(card, bg="white")
-
-            row.pack(fill="x", padx=20, pady=5)
+        for index, habit in enumerate(self.habits):
 
             tk.Label(
-                row, text=habit, bg="white", width=20, anchor="w", font=("Segoe UI", 10)
-            ).grid(row=0, column=0, sticky="w")
+                self.table,
+                text=habit,
+                bg="white",
+                fg="#111827",
+                width=22,
+                anchor="w",
+                font=("Segoe UI", 10),
+            ).grid(row=index + 1, column=0, sticky="w", pady=6)
 
-            vars = []
+            row_vars = []
 
             percent = tk.Label(
-                row,
+                self.table,
                 text="0%",
                 bg="white",
-                fg="#16a34a",
+                fg="#16A34A",
                 width=5,
                 font=("Segoe UI", 10, "bold"),
             )
 
-            percent.grid(row=0, column=8, padx=10)
+            percent.grid(row=index + 1, column=8, padx=10)
 
-            for day in range(1, 8):
+            self.percent_labels.append(percent)
+
+            for day in range(7):
 
                 var = tk.IntVar()
 
-                vars.append(var)
+                row_vars.append(var)
 
                 tk.Checkbutton(
-                    row,
+                    self.table,
                     variable=var,
                     bg="white",
                     activebackground="white",
-                    command=lambda v=vars, l=percent: self.update_progress(v, l),
-                ).grid(row=0, column=day)
+                    command=lambda r=index: self.update_progress(r),
+                ).grid(row=index + 1, column=day + 1)
 
-            self.check_vars.append(vars)
+            self.check_vars.append(row_vars)
+
+    # ==========================
+    # SAVE BUTTON
+    # ==========================
+
+    def create_save_button(self):
 
         tk.Button(
-            card,
+            self.card,
             text="💾 Save Progress",
             bg="#16A34A",
             fg="white",
+            activebackground="#15803D",
+            activeforeground="white",
             font=("Segoe UI", 11, "bold"),
-            width=20,
+            width=22,
+            relief="flat",
+            cursor="hand2",
             command=self.save_data,
-        ).pack(pady=20)
-
-        # Load Previous Data
-
-        self.load_data()
+        ).pack(pady=(10, 20))
 
     # ==========================
     # UPDATE PROGRESS
     # ==========================
 
-    def update_progress(self, vars, label):
+    def update_progress(self, row_index):
 
-        done = sum(v.get() for v in vars)
+        vars = self.check_vars[row_index]
 
-        percent = int(done / len(vars) * 100)
+        completed = sum(var.get() for var in vars)
 
-        label.config(text=f"{percent}%")
+        percent = int((completed / len(vars)) * 100)
+
+        self.percent_labels[row_index].config(text=f"{percent}%")
+
+        # Auto Save
+        self.save_data()
+
+        # Refresh Dashboard
+        self.refresh_dashboard()
 
     # ==========================
     # SAVE DATA
@@ -159,17 +207,69 @@ class HabitTable:
 
     def save_data(self):
 
-        data = {"habits": []}
+        data = Storage.load()
+
+        data["habits"] = []
 
         for i, habit in enumerate(self.habits):
 
-            row = []
+            days = [var.get() for var in self.check_vars[i]]
 
-            for var in self.check_vars[i]:
+            data["habits"].append({"name": habit, "days": days})
 
-                row.append(var.get())
+            # ==========================
+            # UPDATE REAL-TIME HISTORY
+            # ==========================
 
-            data["habits"].append({"name": habit, "days": row})
+            from datetime import datetime
+
+            today = datetime.now().strftime("%Y-%m-%d")
+
+            completed = 0
+
+            total = 0
+
+            for habit in data["habits"]:
+
+                completed += sum(habit["days"])
+
+                total += len(habit["days"])
+
+            pending = total - completed
+
+            success_rate = 0
+
+            if total > 0:
+
+                success_rate = round(completed / total * 100, 2)
+
+            if "history" not in data:
+
+                data["history"] = {}
+
+            data["history"][today] = {
+                "completed": completed,
+                "pending": pending,
+                "success_rate": success_rate,
+                "total_habits": len(self.habits),
+                "timestamp": today,
+            }
+
+            data["completed"] = completed
+
+            data["pending"] = pending
+
+            data["success_rate"] = success_rate
+
+            data["total_habits"] = len(self.habits)
+
+        # ==========================
+        # WEEKLY PROGRESS
+        # ==========================
+
+        data["weekly_progress"] = [
+            sum(habit["days"][day] for habit in data["habits"]) for day in range(7)
+        ]
 
         Storage.save(data)
 
@@ -181,20 +281,85 @@ class HabitTable:
 
         data = Storage.load()
 
-        if not data.get("habits"):
+        habits = data.get("habits", [])
+
+        if not habits:
 
             return
 
-        for i, habit in enumerate(data["habits"]):
+        for i, habit in enumerate(habits):
 
             if i >= len(self.check_vars):
 
                 break
 
-            for j, value in enumerate(habit["days"]):
+            days = habit.get("days", [])
+
+            for j, value in enumerate(days):
 
                 if j >= len(self.check_vars[i]):
 
                     break
 
                 self.check_vars[i][j].set(value)
+
+            self.update_progress(i)
+
+    # ==========================
+    # REFRESH DASHBOARD
+    # ==========================
+
+    def refresh_dashboard(self):
+        """
+        Future Version
+
+        Dashboard
+        Statistics
+        Progress Panel
+        Calendar
+        Streak
+
+        will refresh automatically from here.
+        """
+
+        pass
+
+    # ==========================
+    # GET TOTAL COMPLETED
+    # ==========================
+
+    def get_completed(self):
+
+        total = 0
+
+        for row in self.check_vars:
+
+            total += sum(var.get() for var in row)
+
+        return total
+
+    # ==========================
+    # GET TOTAL PENDING
+    # ==========================
+
+    def get_pending(self):
+
+        total = len(self.habits) * 7
+
+        return total - self.get_completed()
+
+    # ==========================
+    # GET SUCCESS RATE
+    # ==========================
+
+    def get_success_rate(self):
+
+        total = len(self.habits) * 7
+
+        completed = self.get_completed()
+
+        if total == 0:
+
+            return 0
+
+        return round((completed / total) * 100, 1)

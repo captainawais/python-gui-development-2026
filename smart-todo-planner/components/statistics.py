@@ -3,7 +3,10 @@
 # ==========================
 
 import tkinter as tk
+
 from utils.charts import ProgressChart
+from utils.dashboard_service import DashboardService
+
 
 # ==========================
 # STAT CARD
@@ -26,70 +29,39 @@ class StatCard:
     ):
 
         card = tk.Frame(
-
             parent,
-
             bg="white",
-
             bd=1,
-
-            relief="solid",
-
-            width=220,
-
-            height=110
-
+            relief="solid"
         )
 
         card.pack(
-
             side="left",
-
-            padx=12,
-
-            pady=10,
-
-            fill="both",
-
-            expand=True
-
+            expand=True,
+            fill="x",
+            padx=10,
+            pady=10
         )
 
-        card.pack_propagate(False)
-
         tk.Label(
-
             card,
-
             text=title,
-
             bg="white",
-
-            fg="gray",
-
-            font=("Segoe UI",11)
-
+            fg="#111827",
+            font=("Segoe UI", 12, "bold")
         ).pack(
-
-            pady=(18,5)
-
+            pady=(20,5)
         )
 
         tk.Label(
-
             card,
-
             text=value,
-
             bg="white",
-
             fg=color,
-
-            font=("Segoe UI",24,"bold")
-
-        ).pack()
-
-
+            font=("Segoe UI", 20, "bold")
+        ).pack(
+            pady=(0,20)
+        )
 # ==========================
 # STATISTICS SECTION
 # ==========================
@@ -97,6 +69,8 @@ class StatCard:
 class Statistics:
 
     def __init__(self, parent):
+        
+        self.summary = DashboardService.get_summary()
 
         self.frame = tk.Frame(
             parent,
@@ -125,28 +99,28 @@ class Statistics:
         StatCard(
             cards,
             "📋 Total Habits",
-            "10",
+            str(self.summary["total_habits"]),
             "#2563EB"
         )
 
         StatCard(
             cards,
             "✅ Completed",
-            "0",
+            str(self.summary["completed"]),
             "#16A34A"
         )
 
         StatCard(
             cards,
             "❌ Pending",
-            "10",
+            str(self.summary["pending"]),
             "#DC2626"
         )
 
         StatCard(
             cards,
             "📈 Success",
-            "0%",
+            f"{self.summary['success_rate']}%",
             "#F59E0B"
         )
 
@@ -204,14 +178,26 @@ class Statistics:
 
     def show_chart(self):
 
-        sample_data = [
-            2,
-            4,
-            5,
-            7,
-            8,
-            6,
-            9
+        data = DashboardService.get_summary()
+
+        completed = data["completed"]
+
+        chart_data = [
+
+            completed,
+
+            completed,
+
+            completed,
+
+            completed,
+
+            completed,
+
+            completed,
+
+            completed
+
         ]
 
-        ProgressChart.show(sample_data)
+        ProgressChart.show()

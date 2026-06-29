@@ -1,20 +1,23 @@
 # ==========================
 # IMPORTS
 # ==========================
-
 import tkinter as tk
 
 from components.sidebar import Sidebar
-from components.habit_table import HabitTable
-from components.statistics import Statistics
-from components.progress_panel import ProgressPanel
-from components.calendar import CalendarView
-from components.footer import Footer
 
+from components.pages.dashboard_page import DashboardPage
+from components.pages.habits_page import HabitsPage
+from components.pages.calendar_page import CalendarPage
+from components.pages.statistics_page import StatisticsPage
+from components.pages.streak_page import StreakPage
+from components.pages.settings_page import SettingsPage
+from components.pages.about_page import AboutPage
+from components.footer import Footer
 
 # ==========================
 # DASHBOARD CLASS
 # ==========================
+
 
 class Dashboard:
 
@@ -26,18 +29,11 @@ class Dashboard:
 
         self.root = root
 
-        self.main_frame = tk.Frame(
-            root,
-            bg="#0F172A"
-        )
+        self.main_frame = tk.Frame(root, bg="#0F172A")
 
-        self.main_frame.pack(
-            fill="both",
-            expand=True
-        )
+        self.main_frame.pack(fill="both", expand=True)
 
         self.create_layout()
-
 
         # ==========================
         # CREATE LAYOUT
@@ -49,166 +45,131 @@ class Dashboard:
         # SIDEBAR
         # ==========================
 
-        Sidebar(
-            self.main_frame
-        )
+        Sidebar(self.main_frame, self)
+
+        self.content = tk.Frame(self.main_frame, bg="#F8FAFC")
+
+        self.content.pack(side="left", fill="both", expand=True)
 
         # ==========================
-        # CONTENT
+        # SCROLLABLE AREA
         # ==========================
 
-        content = tk.Frame(
-            self.main_frame,
-            bg="#F8FAFC"
+        canvas = tk.Canvas(self.content, bg="#F8FAFC", highlightthickness=0)
+
+        scrollbar = tk.Scrollbar(self.content, orient="vertical", command=canvas.yview)
+
+        self.scroll_frame = tk.Frame(canvas, bg="#F8FAFC")
+
+        self.scroll_frame.bind(
+            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
 
-        content.pack(
-            side="left",
-            fill="both",
-            expand=True
-        )
+        window = canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
 
-        # ==========================
-        # SCROLLABLE CANVAS
-        # ==========================
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(window, width=e.width))
 
-        canvas = tk.Canvas(
-            content,
-            bg="#F8FAFC",
-            highlightthickness=0
-        )
+        canvas.configure(yscrollcommand=scrollbar.set)
 
-        scrollbar = tk.Scrollbar(
-            content,
-            orient="vertical",
-            command=canvas.yview
-        )
+        canvas.pack(side="left", fill="both", expand=True)
 
-        scroll_frame = tk.Frame(
-            canvas,
-            bg="#F8FAFC"
-        )
+        scrollbar.pack(side="right", fill="y")
 
-        scroll_frame.bind(
-
-            "<Configure>",
-
-            lambda e: canvas.configure(
-
-                scrollregion=canvas.bbox("all")
-
-            )
-
-        )
-
-        canvas.create_window(
-
-            (0,0),
-
-            window=scroll_frame,
-
-            anchor="nw"
-
-        )
-
-        canvas.configure(
-
-            yscrollcommand=scrollbar.set
-
-        )
-
-        canvas.pack(
-
-            side="left",
-
-            fill="both",
-
-            expand=True
-
-        )
-
-        scrollbar.pack(
-
-            side="right",
-
-            fill="y"
-
-        )
-
-        # Mouse Wheel Scroll
-
-        canvas.bind_all(
-
+        canvas.bind(
             "<MouseWheel>",
-
-            lambda event:
-
-            canvas.yview_scroll(
-
-                int(-1*(event.delta/120)),
-
-                "units"
-
-            )
-
+            lambda e: canvas.yview_scroll(int(-1 * (e.delta / 120)), "units"),
         )
 
-        # ==========================
-        # HEADER
-        # ==========================
+        self.show_dashboard()
 
-        tk.Label(
+    # ==========================
+    # CLEAR PAGE
+    # ==========================
 
-            scroll_frame,
+    def clear_page(self):
 
-            text="TechFact Habit Track",
+        for widget in self.scroll_frame.winfo_children():
 
-            font=("Segoe UI",28,"bold"),
+            widget.destroy()
 
-            bg="#F8FAFC",
+    # ==========================
+    # DASHBOARD
+    # ==========================
 
-            fg="#111827"
+    def show_dashboard(self):
 
-        ).pack(
-            pady=(30,5)
-        )
+        self.clear_page()
 
-        tk.Label(
+        DashboardPage(self.scroll_frame)
+        
+        Footer(self.scroll_frame)
 
-            scroll_frame,
+    # ==========================
+    # HABITS
+    # ==========================
 
-            text="Build Better Habits Every Day 🚀",
+    def show_habits(self):
 
-            font=("Segoe UI",13),
+        self.clear_page()
 
-            bg="#F8FAFC",
+        HabitsPage(self.scroll_frame)
+        
+   
 
-            fg="gray"
+    # ==========================
+    # CALENDAR
+    # ==========================
 
-        ).pack(
-            pady=(0,20)
-        )
+    def show_calendar(self):
 
-        # ==========================
-        # COMPONENTS
-        # ==========================
+        self.clear_page()
 
-        HabitTable(
-            scroll_frame
-        )
+        CalendarPage(self.scroll_frame)
 
-        Statistics(
-            scroll_frame
-        )
+    # ==========================
+    # STATISTICS
+    # ==========================
 
-        ProgressPanel(
-            scroll_frame
-        )
+    def show_statistics(self):
 
-        CalendarView(
-            scroll_frame
-        )
+        self.clear_page()
 
-        Footer(
-            scroll_frame
-        )
+        StatisticsPage(self.scroll_frame)
+
+  
+
+    # ==========================
+    # STREAK
+    # ==========================
+
+    def show_streaks(self):
+
+        self.clear_page()
+
+        StreakPage(self.scroll_frame)
+
+
+
+    # ==========================
+    # SETTINGS
+    # ==========================
+
+    def show_settings(self):
+
+        self.clear_page()
+
+        SettingsPage(self.scroll_frame)
+
+
+
+    # ==========================
+    # ABOUT
+    # ==========================
+
+    def show_about(self):
+
+        self.clear_page()
+
+        AboutPage(self.scroll_frame)
+       
+

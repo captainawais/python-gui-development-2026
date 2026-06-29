@@ -1,7 +1,7 @@
 {
     "habits": [
         {
-            "name": "\ud83c\udf05 Wake Up",
+            "name": "🌅 Wake Up",
             "days": [
                 0,
                 0,
@@ -13,7 +13,7 @@
             ]
         },
         {
-            "name": "\ud83d\udcaa Workout",
+            "name": "💪 Workout",
             "days": [
                 0,
                 0,
@@ -25,7 +25,7 @@
             ]
         },
         {
-            "name": "\ud83e\uddd8 Meditation",
+            "name": "🧘 Meditation",
             "days": [
                 0,
                 0,
@@ -37,7 +37,7 @@
             ]
         },
         {
-            "name": "\ud83d\udcc5 Planning",
+            "name": "📅 Planning",
             "days": [
                 0,
                 0,
@@ -49,7 +49,7 @@
             ]
         },
         {
-            "name": "\ud83d\udcbb Coding",
+            "name": "💻 Coding",
             "days": [
                 0,
                 0,
@@ -61,7 +61,7 @@
             ]
         },
         {
-            "name": "\ud83d\udcda Reading",
+            "name": "📚 Reading",
             "days": [
                 0,
                 0,
@@ -73,7 +73,7 @@
             ]
         },
         {
-            "name": "\ud83d\udca7 Drink Water",
+            "name": "💧 Drink Water",
             "days": [
                 0,
                 0,
@@ -85,7 +85,7 @@
             ]
         },
         {
-            "name": "\ud83e\udd57 Healthy Food",
+            "name": "🥗 Healthy Food",
             "days": [
                 0,
                 0,
@@ -97,19 +97,19 @@
             ]
         },
         {
-            "name": "\ud83d\udeb6 Walking",
+            "name": "🚶 Walking",
             "days": [
                 0,
                 0,
                 0,
                 0,
-                1,
+                0,
                 0,
                 0
             ]
         },
         {
-            "name": "\ud83d\ude34 Sleep Early",
+            "name": "😴 Sleep Early",
             "days": [
                 0,
                 0,
@@ -120,5 +120,31 @@
                 0
             ]
         }
-    ]
+    ],
+    "history": {
+        "2026-06-29": {
+            "completed": 0,
+            "pending": 70,
+            "success_rate": 0.0,
+            "total_habits": 10,
+            "timestamp": "2026-06-29"
+        }
+    },
+    "weekly_progress": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "monthly_progress": {},
+    "current_streak": 0,
+    "best_streak": 0,
+    "last_completed_date": "",
+    "total_habits": 10,
+    "completed": 0,
+    "pending": 70,
+    "success_rate": 0.0
 }

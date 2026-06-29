@@ -6,49 +6,64 @@ import tkinter as tk
 
 from components.dashboard import Dashboard
 
-
 # ==========================
-# MAIN WINDOW
-# ==========================
-
-window = tk.Tk()
-
-window.title(
-    "TechFact Habit Track v1.0"
-)
-
-window.geometry(
-    "1400x850"
-)
-
-window.configure(
-    bg="#0F172A"
-)
-
-window.state("zoomed")
-
-window.minsize(
-    1200,
-    700
-)
-
-window.bind(
-    "<Escape>",
-    lambda event: window.destroy()
-)
-
-
-# ==========================
-# START DASHBOARD
+# APPLICATION
 # ==========================
 
-Dashboard(
-    window
-)
+
+class TechFactHabitTrackApp:
+
+    # ==========================
+    # INIT
+    # ==========================
+
+    def __init__(self):
+
+        self.window = tk.Tk()
+
+        self.configure_window()
+
+        Dashboard(self.window)
+
+    # ==========================
+    # WINDOW SETTINGS
+    # ==========================
+
+    def configure_window(self):
+
+        self.window.title("TechFact Habit Track v2.0")
+
+        self.window.geometry("1400x850")
+
+        self.window.minsize(1200, 700)
+
+        self.window.configure(bg="#F8FAFC")
+
+        try:
+
+            self.window.state("zoomed")
+
+        except Exception:
+
+            self.window.attributes("-zoomed", True)
+
+        self.window.bind("<Escape>", lambda event: self.window.destroy())
+
+    # ==========================
+    # RUN APPLICATION
+    # ==========================
+
+    def run(self):
+
+        self.window.mainloop()
 
 
 # ==========================
 # START APPLICATION
 # ==========================
 
-window.mainloop()
+if __name__ == "__main__":
+
+    app = TechFactHabitTrackApp()
+
+    app.run()

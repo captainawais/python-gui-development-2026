@@ -4,15 +4,16 @@
 
 import tkinter as tk
 
+from components.progress_panel import ProgressPanel
 from utils.dashboard_service import DashboardService
-
+ 
 
 # ==========================
-# STREAK PAGE
+# PROGRESS PAGE
 # ==========================
 
 
-class StreakPage:
+class ProgressPage:
 
     # ==========================
     # INIT
@@ -28,7 +29,7 @@ class StreakPage:
 
         tk.Label(
             parent,
-            text="Streak",
+            text="Progress",
             bg="#F8FAFC",
             fg="#111827",
             font=("Segoe UI", 28, "bold"),
@@ -36,14 +37,20 @@ class StreakPage:
 
         tk.Label(
             parent,
-            text="Keep your consistency alive every day 🔥",
+            text="Track your daily performance and habit completion 🚀",
             bg="#F8FAFC",
             fg="gray",
             font=("Segoe UI", 12),
         ).pack(pady=(0, 25))
 
         # ==========================
-        # STREAK CARD
+        # PROGRESS PANEL
+        # ==========================
+
+        ProgressPanel(parent)
+
+        # ==========================
+        # SUMMARY CARD
         # ==========================
 
         card = tk.Frame(parent, bg="white", bd=1, relief="solid")
@@ -52,11 +59,23 @@ class StreakPage:
 
         tk.Label(
             card,
-            text="🔥 Streak Summary",
+            text="Progress Summary",
             bg="white",
             fg="#111827",
             font=("Segoe UI", 18, "bold"),
         ).pack(anchor="w", padx=20, pady=(20, 15))
+
+        self.add_item(
+            card, "📋 Total Habits", str(self.summary["total_habits"]), "#2563EB"
+        )
+
+        self.add_item(card, "✅ Completed", str(self.summary["completed"]), "#16A34A")
+
+        self.add_item(card, "❌ Pending", str(self.summary["pending"]), "#DC2626")
+
+        self.add_item(
+            card, "📈 Success Rate", f"{self.summary['success_rate']}%", "#F59E0B"
+        )
 
         self.add_item(
             card,
@@ -69,45 +88,8 @@ class StreakPage:
             card, "🏆 Best Streak", f"{self.summary['best_streak']} Days", "#16A34A"
         )
 
-        self.add_item(
-            card, "📈 Success Rate", f"{self.summary['success_rate']}%", "#F59E0B"
-        )
-
-        self.add_item(card, "✅ Completed", str(self.summary["completed"]), "#22C55E")
-
-        self.add_item(card, "❌ Pending", str(self.summary["pending"]), "#EF4444")
-
-        self.add_item(
-            card, "📋 Total Habits", str(self.summary["total_habits"]), "#2563EB"
-        )
-
-        # ==========================
-        # MOTIVATION CARD
-        # ==========================
-
-        motivation = tk.Frame(parent, bg="white", bd=1, relief="solid")
-
-        motivation.pack(fill="x", padx=30, pady=20)
-
-        tk.Label(
-            motivation,
-            text="💡 Motivation",
-            bg="white",
-            fg="#111827",
-            font=("Segoe UI", 16, "bold"),
-        ).pack(anchor="w", padx=20, pady=(20, 10))
-
-        tk.Label(
-            motivation,
-            text="Every completed habit brings you one step closer to your goals.\nStay consistent and build your streak every day.",
-            justify="left",
-            bg="white",
-            fg="#475569",
-            font=("Segoe UI", 11),
-        ).pack(anchor="w", padx=20, pady=(0, 20))
-
     # ==========================
-    # ADD ITEM
+    # ADD SUMMARY ITEM
     # ==========================
 
     def add_item(self, parent, title, value, color):
@@ -123,4 +105,4 @@ class StreakPage:
         tk.Label(
             row, text=value, bg="white", fg=color, font=("Segoe UI", 11, "bold")
         ).pack(side="right")
-
+        

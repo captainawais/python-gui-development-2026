@@ -1,0 +1,33 @@
+
+# ==========================================
+# TechFact Habit Track v2.0
+# Requirements
+# ==========================================
+
+# Charts
+matplotlib>=3.9.0
+
+# Calendar
+tkcalendar>=1.6.1
+
+# Image Support
+Pillow>=11.0.0
+
+# Desktop Notifications
+plyer>=2.1.0
+
+# Date & Time Utilities
+python-dateutil>=2.9.0
+
+# JSON Utilities
+orjson>=3.10.0
+
+# Future Backend (Version 3)
+requests>=2.32.0
+
+# Future Django API
+Django>=5.2
+djangorestframework>=3.16
+
+# Development Tools
+black>=25.0
