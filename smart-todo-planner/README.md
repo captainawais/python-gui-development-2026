@@ -1,62 +1,97 @@
-```markdown
 # 🚀 TechFact Habit Track v2.0
 
-A modern desktop Habit Tracker application built with **Python** and **Tkinter**. The project is designed using a modular architecture and stores data in JSON, making it ready for future migration to **Django + REST API + PostgreSQL**.
+> **A Modern Desktop Habit Tracking Application built with Python & Tkinter**
+>
+> Track your daily habits, analyze progress, build consistency, and stay productive with a clean, modern desktop experience.
 
 ---
 
-# ✨ Features
+## ✨ Preview
 
-- ✅ Beautiful Modern UI
-- ✅ Dashboard Overview
-- ✅ Habit Management
-- ✅ Weekly Progress Tracking
-- ✅ Monthly Calendar
-- ✅ Statistics Dashboard
-- ✅ Streak Tracking
-- ✅ Settings Page
-- ✅ About Page
-- ✅ Real-Time JSON Storage
-- ✅ Progress Charts
-- ✅ Scrollable Layout
-- ✅ Responsive Desktop Design
-- ✅ Future Backend Ready
+**TechFact Habit Track** is a modern desktop application designed to help users build positive habits through real-time tracking, statistics, streak management, and visual analytics.
+
+Built with a modular architecture, the project is ready for future migration to **Django REST Framework + PostgreSQL**.
+
+---
+
+## 🚀 Features
+
+### 🏠 Dashboard
+
+* Real-Time Overview
+* Weekly Progress
+* Success Rate
+* Current & Best Streak
+* Quick Statistics
+
+### ✅ Habit Manager
+
+* Create Daily Habits
+* 7-Day Tracking System
+* Auto Progress Calculation
+* One-Click Save
+* Real-Time Updates
+
+### 📅 Calendar
+
+* Monthly View
+* Completed Days Highlight
+* Activity History
+* Automatic Updates
+
+### 📊 Statistics
+
+* Total Habits
+* Completed Tasks
+* Pending Tasks
+* Success Percentage
+* Weekly Analytics Chart
+
+### 🔥 Streak Tracking
+
+* Current Streak
+* Best Streak
+* Weekly Summary
+* Productivity Tracking
+
+### ⚙️ Settings
+
+* Notifications
+* Auto Save
+* Reset Application Data
+* Future Theme Support
+
+---
+
+# 🖼️ Screenshots
+
+> Add your application screenshots here.
+
+```
+assets/screenshots/dashboard.png
+assets/screenshots/habits.png
+assets/screenshots/statistics.png
+assets/screenshots/calendar.png
+```
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
+TechFact-Habit-Track/
 
-smart-todo-planner/
-
-│
 ├── assets/
-│   ├── icons/
-│   └── images/
 │
 ├── components/
 │   ├── pages/
-│   │   ├── dashboard_page.py
-│   │   ├── habits_page.py
-│   │   ├── calendar_page.py
-│   │   ├── statistics_page.py
-│   │   ├── streak_page.py
-│   │   ├── settings_page.py
-│   │   ├── about_page.py
-│   │   └── progress_page.py
-│   │
 │   ├── dashboard.py
 │   ├── sidebar.py
+│   ├── footer.py
 │   ├── habit_table.py
-│   ├── calendar.py
 │   ├── statistics.py
 │   ├── progress_panel.py
-│   └── footer.py
-│
-├── data/
-│   ├── habits.json
-│   └── settings.json
+│   └── calendar.py
 │
 ├── utils/
 │   ├── storage.py
@@ -66,179 +101,68 @@ smart-todo-planner/
 │   ├── notification.py
 │   └── settings.py
 │
-├── main.py
+├── data/
+│   ├── habits.json
+│   └── settings.json
+│
 ├── requirements.txt
-└── README.md
-
+├── README.md
+└── main.py
 ```
 
 ---
 
-# 🖥️ Application Pages
+# 🛠️ Tech Stack
 
-- 🏠 Dashboard
-- ✅ Habits
-- 📅 Calendar
-- 📊 Statistics
-- 🔥 Streak
-- ⚙️ Settings
-- ℹ️ About
-
----
-
-# 📊 Dashboard
-
-Dashboard displays real-time information including:
-
-- Total Habits
-- Completed Tasks
-- Pending Tasks
-- Success Rate
-- Current Streak
-- Best Streak
-- Weekly Progress Chart
+| Category      | Technology |
+| ------------- | ---------- |
+| Language      | Python     |
+| GUI           | Tkinter    |
+| Charts        | Matplotlib |
+| Storage       | JSON       |
+| Calendar      | TkCalendar |
+| Images        | Pillow     |
+| Notifications | Plyer      |
 
 ---
 
-# ✅ Habits
-
-- Track daily habits
-- 7-day completion system
-- Auto percentage calculation
-- Save progress
-- Real-time updates
-
----
-
-# 📅 Calendar
-
-Calendar automatically reads saved data and highlights completed activity.
-
-Features:
-
-- Monthly View
-- Current Day Highlight
-- Completed Day Indicator
-- Real-Time History Support
-
----
-
-# 📈 Statistics
-
-Displays:
-
-- Total Habits
-- Completed
-- Pending
-- Success Rate
-- Weekly Progress Chart
-
----
-
-# 🔥 Streak
-
-Track:
-
-- Current Streak
-- Best Streak
-- Success Percentage
-- Weekly Summary
-
----
-
-# ⚙️ Settings
-
-User preferences include:
-
-- Notifications
-- Dark Mode (Future)
-- Auto Save
-- Reset Data
-
-Settings are stored separately inside:
-
-```
-
-data/settings.json
-
-```
-
----
-
-# 💾 Data Storage
-
-Habit data is stored inside:
-
-```
-
-data/habits.json
-
-```
-
-Settings are stored inside:
-
-```
-
-data/settings.json
-
-````
-
-No database is required in Version 2.
-
----
-
-# 📦 Installation
-
-Clone the repository:
+# ⚡ Installation
 
 ```bash
-git clone https://github.com/yourusername/techfact-habit-track.git
-````
+git clone https://github.com/captainawais/techfact-habit-track.git
 
-Open the project:
+cd techfact-habit-track
 
-```bash
-cd smart-todo-planner
-```
-
-Install dependencies:
-
-```bash
 pip install -r requirements.txt
-```
 
-Run the application:
-
-```bash
 python main.py
 ```
 
 ---
 
-# 🛠️ Technologies Used
+# 📈 Current Version
 
-* Python
-* Tkinter
-* JSON
-* Matplotlib
-* Pillow
-* TkCalendar
+* ✅ Version 2.0
+* ✅ Modular Architecture
+* ✅ Real-Time Data Storage
+* ✅ Dashboard Analytics
+* ✅ JSON-Based Backend
+* ✅ Future Ready
 
 ---
 
-# 🚀 Future Roadmap (Version 3)
+# 🚀 Upcoming Features (v3)
 
 * Django Backend
-* Django REST Framework
+* REST API
 * PostgreSQL
 * User Authentication
-* Cloud Sync
-* Multi-Device Support
 * Login System
-* Email Notifications
-* Analytics Dashboard
-* Habit Categories
+* Cloud Sync
 * AI Habit Suggestions
+* Email Notifications
+* Multi-Device Support
+* Dark Theme
 
 ---
 
@@ -248,19 +172,29 @@ python main.py
 
 Software Engineer
 
+* 💻 Python Developer
+* 🌐 Full Stack Web Developer
+* ⚛️ React & Next.js Developer
+* 🗄️ Django Backend Developer
+
 GitHub:
 https://github.com/captainawais
 
 LinkedIn:
-https://linkedin.com/in/awais-farooq-388346405
+https://www.linkedin.com/in/awais-farooq-388346405
 
 ---
 
-# 📜 License
+# ⭐ Support
 
-This project is developed for educational and portfolio purposes.
+If you found this project helpful, please consider giving it a ⭐ on GitHub.
+
+It helps support future development and motivates me to continue building open-source projects.
+
+---
+
+# 📄 License
+
+This project is licensed for educational and portfolio purposes.
 
 © 2026 Engr. Awais Farooq. All Rights Reserved.
-
-```
-```
